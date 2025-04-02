@@ -9,14 +9,7 @@ const USER_QUEUE = "cliente_to_user_queue"; // Añadir esta cola específica
 
 export async function clienteCreatedEvent(clienteUser) {
   try {
-    const connection = await amqp.connect({
-      protocol: 'amqp',
-      hostname: process.env.RABBITMQ_HOST || 'rabbitmq',
-      port: 5672,
-      username: process.env.RABBITMQ_USER || 'admin',
-      password: process.env.RABBITMQ_PASS || 'admin'
-    });
-    
+    const connection = await amqp.connect(process.env.RABBITMQ_URL);
     const channel = await connection.createChannel();
 
     // Declarar exchange

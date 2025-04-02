@@ -2,29 +2,16 @@ import dotenv from "dotenv";
 import { Sequelize } from "sequelize";
 dotenv.config();
 
-// Debug: Imprimir variables de entorno (solo para depuración)
-console.log("Variables de entorno de BD:", {
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD || process.env.DB_PASS || 'no_password_set',
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT
-});
+// Debug: Imprimir la URL de conexión (solo para depuración)
+console.log("URL de conexión MySQL:", process.env.MYSQL_URL);
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD || process.env.DB_PASS, // Intentar ambas variables
-  {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: "mysql",
-    logging: false, // Puedes activarlo para ver las consultas SQL
-    dialectOptions: {
-      connectTimeout: 60000 // Para darle más tiempo a la conexión
-    },
-  }
-);
+const sequelize = new Sequelize(process.env.MYSQL_URL, {
+  dialect: "mysql",
+  logging: false, // Puedes activarlo para ver las consultas SQL
+  dialectOptions: {
+    connectTimeout: 60000 // Para darle más tiempo a la conexión
+  },
+});
 
 // Función de conexión con reintentos
 const connectWithRetry = async (maxRetries = 5, retryInterval = 5000) => {
